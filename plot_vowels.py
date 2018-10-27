@@ -20,7 +20,7 @@ def process_csv(path,avg):
 	return data
 
 
-def plot_vowels(data):
+def plot_vowels(data,title):
 	"""
 	Take in a parsed DataTable object with f1, f2, and phone columns and create a vowel plot.
 	"""
@@ -43,7 +43,7 @@ def plot_vowels(data):
 
 	# make figure
 	fig, ax = plt.subplots()
-	fig.suptitle('Vowel Plot', fontsize=14, fontweight='bold')
+	fig.suptitle(title, fontsize=14, fontweight='bold')
 	
 	# set axes
 	ax.set_xlabel('f2 (hz)')
@@ -68,9 +68,10 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Command line arguments to plot vowels')
 	parser.add_argument('-c', '--csv', help = 'path to input .csv')
 	parser.add_argument('-a', '--avg', action = 'store_true', help = 'plot mean values for each phone, rather than the default behavior of plotting all points')
+	parser.add_argument('-t', '--title', action = 'store', nargs='+', default = 'Vowel Plot', help = 'override default title')
 	args = parser.parse_args()
 
 	# read in data
 	data = process_csv(args.csv,args.avg)
-	plot_vowels(data)
-	
+	title = ' '.join(args.title) # convert list to string
+	plot_vowels(data, title)	
