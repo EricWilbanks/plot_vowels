@@ -4,17 +4,26 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import argparse
 
-def process_csv(path):
+
+def process_csv(path,avg):
 	"""
 	Read in a .csv file from `path` which contains columns "f1","f2","f3","phone"
 	Return a parsed pandas DataTable object
 	"""	
 	data = pd.read_csv(path)
+	# user chose to average measurements for phones
+	if avg is True:
+		data = data.groupby('phone').mean().reset_index()
+		print(data)
 	return data
 
 
 def plot_vowels(data):
+	"""
+	Take in a parsed DataTable object with f1, f2, and phone columns and create a vowel plot.
+	"""
 	# determine ranges for axes
 	f1_min = min(data['f1'])
 	f1_max = max(data['f1'])
@@ -55,6 +64,13 @@ def plot_vowels(data):
 #####
 
 if __name__ == "__main__":
-	data = process_csv('test.csv')
+	# process arguments
+	parser = argparse.ArgumentParser(description='Command line arguments to plot vowels')
+	parser.add_argument('-c', '--csv', help = 'path to input .csv')
+	parser.add_argument('-a', '--avg', action = 'store_true', help = 'plot mean values for each phone, rather than the default behavior of plotting all points')
+	args = parser.parse_args()
+
+	# read in data
+	data = process_csv(args.csv,args.avg)
 	plot_vowels(data)
 	
