@@ -16,7 +16,6 @@ def process_csv(path,avg):
 	# user chose to average measurements for phones
 	if avg is True:
 		data = data.groupby('phone').mean().reset_index()
-		print(data)
 	return data
 
 
